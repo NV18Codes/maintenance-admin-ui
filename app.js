@@ -40,14 +40,15 @@ async function generateInvoice() {
   const workOrderId = document.getElementById("workOrderId").value;
 
   const res = await fetch(
-    `${API_URL}/invoices/generate/${workOrderId}`,
+    `${API_URL}/invoices/generate/1`,
     {
-      method: "POST",
+      method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        "Authorization": `Bearer ${token}`
+      }
     }
   );
+  
 
   const data = await res.json();
 
