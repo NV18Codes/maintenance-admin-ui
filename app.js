@@ -32,7 +32,6 @@ async function login() {
 
 
 async function generateInvoice() {
-  token = localStorage.getItem("token");
   if (!token) {
     alert("Please login first");
     return;
@@ -40,24 +39,28 @@ async function generateInvoice() {
 
   const workOrderId = document.getElementById("workOrderId").value;
 
-  const res = await fetch(`${API_URL}/invoices/generate/${workOrderId}`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${token}`
+  const res = await fetch(
+    `${API_URL}/invoices/generate/${workOrderId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }
-  });
+  );
 
   const data = await res.json();
 
   if (data.invoice_number) {
-    const link = document.getElementById("pdfLink");
-    link.href = `${API_URL}/${data.pdf_path}`;
+    const link = document.getElementById("invoiceLink");
+    link.href = `${API_URL}${data.pdf_url}`;
     link.innerText = `Download Invoice ${data.invoice_number}`;
     link.style.display = "block";
   } else {
     alert("Invoice generation failed");
   }
 }
+
 
 window.onload = () => {
   if (localStorage.getItem("token")) {
