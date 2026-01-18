@@ -1,0 +1,26 @@
+<h3>Post-Check</h3>
+
+<textarea id="remarks"></textarea><br>
+<input type="file" id="images" multiple><br>
+
+<button onclick="submitPostCheck()">Submit</button>
+<script>async function submitPostCheck() {
+        const form = new FormData();
+        form.append("remarks", document.getElementById("remarks").value);
+        form.append("work_order_id", 1);
+
+        const files = document.getElementById("images").files;
+        for (let f of files) form.append("images", f);
+
+        await fetch(`${API_URL}/post-check/`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+            body: form
+        });
+
+        alert("Post-check completed");
+    }
+</script>
+<script src="app.js"></script>

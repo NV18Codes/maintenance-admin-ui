@@ -1,0 +1,26 @@
+<h3>Job Card</h3>
+
+<input placeholder="Date" id="date"><br>
+<textarea placeholder="Work Done" id="work"></textarea><br>
+
+<button onclick="submitJob()">Save</button>
+<script>async function submitJob() {
+        const data = {
+            date: document.getElementById("date").value,
+            description: document.getElementById("work").value,
+            work_order_id: 1
+        };
+
+        await fetch(`${API_URL}/job-cards/`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        alert("Job card saved");
+    }
+</script>
+<script src="app.js"></script>

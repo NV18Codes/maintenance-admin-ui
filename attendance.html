@@ -1,0 +1,29 @@
+<h3>Attendance</h3>
+
+<label>Employee Name</label>
+<input id="name"><br>
+
+<label>Present</label>
+<input type="checkbox" id="present"><br>
+
+<button onclick="submitAttendance()">Submit</button>
+<script>async function submitAttendance() {
+        const data = {
+            employee_name: document.getElementById("name").value,
+            present: document.getElementById("present").checked,
+            work_order_id: 1
+        };
+
+        await fetch(`${API_URL}/attendance/`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        alert("Attendance saved");
+    }
+</script>
+<script src="app.js"></script>

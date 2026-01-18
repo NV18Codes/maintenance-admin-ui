@@ -1,12 +1,22 @@
-const API_URL = "https://maintenance-app-lptm.onrender.com";
+/* ================= CONFIG ================= */
 
+const API_URL = "https://maintenance-app-lptm.onrender.com";
 let token = localStorage.getItem("token") || "";
 
-/* ---------------- LOGIN ---------------- */
+/* ================= AUTH GUARD ================= */
+
+function requireLogin() {
+  if (!token) {
+    alert("Session expired. Please login again.");
+    window.location.href = "index.html";
+  }
+}
+
+/* ================= LOGIN ================= */
 
 async function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+  const email = document.getElementById("email")?.value.trim();
+  const password = document.getElementById("password")?.value.trim();
 
   if (!email || !password) {
     alert("Please enter email and password");
@@ -14,7 +24,7 @@ async function login() {
   }
 
   const formData = new URLSearchParams();
-  formData.append("username", email); // OAuth2 expects "username"
+  formData.append("username", email);   // OAuth2 field
   formData.append("password", password);
 
   try {
@@ -36,8 +46,11 @@ async function login() {
     token = data.access_token;
     localStorage.setItem("token", token);
 
-    document.getElementById("invoiceSection").style.display = "block";
+    const invoiceSection = document.getElementById("invoiceSection");
+    if (invoiceSection) invoiceSection.style.display = "block";
+
     alert("Login successful");
+    window.location.href = "dashboard.html";
 
   } catch (err) {
     console.error(err);
@@ -45,22 +58,37 @@ async function login() {
   }
 }
 
-/* ---------------- GENERATE INVOICE ---------------- */
+/* ================= LOGOUT ================= */
+
+function logout() {
+  localStorage.removeItem("token");
+  token = "";
+  window.location.href = "index.html";
+}
+
+/* ================= HEADER HELPER ================= */
+
+function authHeaders(extra = {}) {
+  return {
+    "Authorization": `Bearer ${token}`,
+    ...extra
+  };
+}
+
+/* ================= GENERATE INVOICE ================= */
 
 async function generateInvoice() {
-  if (!token) {
-    alert("Please login first");
-    return;
-  }
+  requireLogin();
+
+  const workOrderId =
+    document.getElementById("workOrderId")?.value || 1;
 
   try {
     const res = await fetch(
-      `${API_URL}/invoices/generate/1`,
+      `${API_URL}/invoices/generate/${workOrderId}`,
       {
         method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
+        headers: authHeaders()
       }
     );
 
@@ -73,7 +101,6 @@ async function generateInvoice() {
 
     alert(`Invoice generated: ${data.invoice_number}`);
 
-    // Open PDF if available
     if (data.pdf_url) {
       window.open(`${API_URL}${data.pdf_url}`, "_blank");
     }
@@ -84,10 +111,124 @@ async function generateInvoice() {
   }
 }
 
-/* ---------------- PAGE LOAD ---------------- */
+/* ================= PRE-CHECK ================= */
+
+async function submitPrecheck() {
+  requireLogin();
+
+  const payload = {
+    tools_ok: document.getElementById("tools")?.checked || false,
+    safety_ok: document.getElementById("safety")?.checked || false,
+    workers_ok: document.getElementById("workers")?.checked || false,
+    site_ok: document.getElementById("site")?.checked || false,
+    remarks: document.getElementById("remarks")?.value || "",
+    work_order_id:
+      document.getElementById("workOrderId")?.value || 1
+  };
+
+  try {
+    const res = await fetch(`${API_URL}/pre-check/`, {
+      method: "POST",
+      headers: authHeaders({ "Content-Type": "application/json" }),
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.detail || "Pre-check failed");
+      return;
+    }
+
+    alert("Pre-check submitted successfully");
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error while submitting pre-check");
+  }
+}
+
+/* ================= POST-CHECK (IMAGES) ================= */
+
+async function submitPostcheck() {
+  requireLogin();
+
+  const formData = new FormData();
+  formData.append(
+    "work_order_id",
+    document.getElementById("workOrderId")?.value || 1
+  );
+  formData.append(
+    "remarks",
+    document.getElementById("remarks")?.value || ""
+  );
+
+  const images = document.getElementById("images")?.files || [];
+  for (let img of images) {
+    formData.append("images", img);
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/post-check/`, {
+      method: "POST",
+      headers: authHeaders(),
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.detail || "Post-check failed");
+      return;
+    }
+
+    alert("Post-check completed successfully");
+
+  } catch (err) {
+    console.error(err);
+    alert("Post-check upload failed");
+  }
+}
+
+/* ================= ATTENDANCE ================= */
+
+async function submitAttendance() {
+  requireLogin();
+
+  const payload = {
+    worker_name: document.getElementById("workerName")?.value,
+    status: document.getElementById("status")?.value,
+    work_order_id:
+      document.getElementById("workOrderId")?.value || 1
+  };
+
+  try {
+    const res = await fetch(`${API_URL}/attendance/`, {
+      method: "POST",
+      headers: authHeaders({ "Content-Type": "application/json" }),
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.detail || "Attendance failed");
+      return;
+    }
+
+    alert("Attendance recorded successfully");
+
+  } catch (err) {
+    console.error(err);
+    alert("Attendance submission failed");
+  }
+}
+
+/* ================= PAGE LOAD ================= */
 
 window.onload = () => {
-  if (token) {
-    document.getElementById("invoiceSection").style.display = "block";
+  const invoiceSection = document.getElementById("invoiceSection");
+  if (token && invoiceSection) {
+    invoiceSection.style.display = "block";
   }
 };

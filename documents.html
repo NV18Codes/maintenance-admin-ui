@@ -1,0 +1,11 @@
+<button onclick="downloadPDF()">Download Invoice PDF</button>
+<button onclick="downloadCSV()">Download Report CSV</button>
+<script>function downloadPDF() {
+        window.open(`${API_URL}/invoices/INV-XXXX.pdf`);
+    }
+
+    function downloadCSV() {
+        window.open(`${API_URL}/reports/work-order/1/csv`);
+    }
+</script>
+<script src="app.js"></script>
