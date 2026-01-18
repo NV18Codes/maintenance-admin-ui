@@ -256,4 +256,52 @@ window.onload = () => {
     if (workerSection) workerSection.style.display = "block";
   }
 };
+/* ---------------- ASSIGN WORKERS ---------------- */
+
+async function assignWorkers() {
+  if (!token) {
+    alert("Please login first");
+    return;
+  }
+
+  const workOrderId = document.getElementById("workOrderId").value;
+  const workerIdsInput = document.getElementById("workerIds").value;
+
+  if (!workOrderId || !workerIdsInput) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  const worker_ids = workerIdsInput
+    .split(",")
+    .map(id => parseInt(id.trim()))
+    .filter(id => !isNaN(id));
+
+  try {
+    const res = await fetch(`${API_URL}/worker-assignments/`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        work_order_id: parseInt(workOrderId),
+        worker_ids: worker_ids
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.detail || "Worker assignment failed");
+      return;
+    }
+
+    alert("Workers assigned successfully");
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error while assigning workers");
+  }
+}
 
