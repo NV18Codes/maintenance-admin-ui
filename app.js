@@ -6,10 +6,16 @@ async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
+  const formData = new URLSearchParams();
+  formData.append("username", email);   // OAuth2 expects "username"
+  formData.append("password", password);
+
   const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, password })
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: formData.toString()
   });
 
   const data = await res.json();
@@ -23,6 +29,7 @@ async function login() {
     alert("Login failed");
   }
 }
+
 
 async function generateInvoice() {
   token = localStorage.getItem("token");
