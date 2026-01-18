@@ -37,28 +37,22 @@ async function generateInvoice() {
     return;
   }
 
-  const workOrderId = document.getElementById("workOrderId").value;
-
   const res = await fetch(
     `${API_URL}/invoices/generate/1`,
     {
-      method: "GET",
+      method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`
       }
     }
   );
-  
 
   const data = await res.json();
 
-  if (data.invoice_number) {
-    const link = document.getElementById("invoiceLink");
-    link.href = `${API_URL}${data.pdf_url}`;
-    link.innerText = `Download Invoice ${data.invoice_number}`;
-    link.style.display = "block";
+  if (res.ok) {
+    alert(`Invoice generated: ${data.invoice_number}`);
   } else {
-    alert("Invoice generation failed");
+    alert(data.detail || "Invoice generation failed");
   }
 }
 
