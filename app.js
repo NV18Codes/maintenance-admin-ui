@@ -58,6 +58,17 @@ async function login() {
   }
 }
 
+function getUserRole() {
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.role || null;
+  } catch {
+    return null;
+  }
+}
+
 /* ================= LOGOUT ================= */
 
 function logout() {
@@ -227,8 +238,22 @@ async function submitAttendance() {
 /* ================= PAGE LOAD ================= */
 
 window.onload = () => {
-  const invoiceSection = document.getElementById("invoiceSection");
-  if (token && invoiceSection) {
-    invoiceSection.style.display = "block";
+  if (!token) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  const role = getUserRole();
+
+  const adminSection = document.getElementById("adminSection");
+  const workerSection = document.getElementById("workerSection");
+
+  if (role === "admin") {
+    if (adminSection) adminSection.style.display = "block";
+    if (workerSection) workerSection.style.display = "none";
+  } else {
+    if (adminSection) adminSection.style.display = "none";
+    if (workerSection) workerSection.style.display = "block";
   }
 };
+
