@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Maintenance Admin Panel</title>
 </head>
+
 <body>
   <h2>Maintenance Admin Panel</h2>
 
-  <h3>Login</h3>
+  <h1>Maintenance Admin Panel</h1>
+
+  <h2>Login</h2>
   <input id="email" placeholder="Email" />
-  <br /><br />
   <input id="password" type="password" placeholder="Password" />
-  <br /><br />
   <button onclick="login()">Login</button>
 
   <hr />
 
-  <h3>Invoice</h3>
-  <button onclick="generateInvoice()">Generate Invoice (Work Order #1)</button>
+  <div id="invoiceSection" style="display:none">
+    <h2>Generate Invoice</h2>
+
+    <input id="workOrderId" type="number" value="1" />
+    <button onclick="generateInvoice()">Generate Invoice</button>
+
+    <br /><br />
+    <a id="pdfLink" target="_blank" style="display:none"></a>
+  </div>
+
 
   <script src="app.js"></script>
 </body>
+
 </html>

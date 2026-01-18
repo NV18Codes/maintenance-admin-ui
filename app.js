@@ -2,41 +2,38 @@ const API_URL = "https://maintenance-app-lptm.onrender.com";
 
 let token = "";
 
-// ---------------- LOGIN ----------------
 async function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const formData = new URLSearchParams();
-  formData.append("username", email);   // OAuth2 expects username
-  formData.append("password", password);
-
   const res = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: formData
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
   });
 
   const data = await res.json();
 
   if (data.access_token) {
     token = data.access_token;
+    localStorage.setItem("token", token);
+    document.getElementById("invoiceSection").style.display = "block";
     alert("Login successful");
   } else {
     alert("Login failed");
   }
 }
 
-// ---------------- GENERATE INVOICE ----------------
 async function generateInvoice() {
+  token = localStorage.getItem("token");
   if (!token) {
     alert("Please login first");
     return;
   }
 
-  const res = await fetch(`${API_URL}/invoices/generate/1`, {
+  const workOrderId = document.getElementById("workOrderId").value;
+
+  const res = await fetch(`${API_URL}/invoices/generate/${workOrderId}`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`
@@ -46,9 +43,17 @@ async function generateInvoice() {
   const data = await res.json();
 
   if (data.invoice_number) {
-    alert(`Invoice generated: ${data.invoice_number}`);
-    // Optional: window.open(`${API_URL}/${data.pdf_path}`);
+    const link = document.getElementById("pdfLink");
+    link.href = `${API_URL}/${data.pdf_path}`;
+    link.innerText = `Download Invoice ${data.invoice_number}`;
+    link.style.display = "block";
   } else {
     alert("Invoice generation failed");
   }
 }
+
+window.onload = () => {
+  if (localStorage.getItem("token")) {
+    document.getElementById("invoiceSection").style.display = "block";
+  }
+};
