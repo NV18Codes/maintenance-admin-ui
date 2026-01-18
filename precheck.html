@@ -1,19 +1,48 @@
-<h3>Pre-Check Form</h3>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pre-Cleaning Check</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<h2>Pre-Cleaning Inspection</h2>
 
-<label>Tools Available:</label>
-<input type="checkbox" id="tools"><br>
+<div class="card">
+<table>
+<tr>
+  <th>Question</th>
+  <th>Yes</th>
+  <th>No</th>
+  <th>Remarks</th>
+</tr>
 
-<label>Safety Equipment:</label>
-<input type="checkbox" id="safety"><br>
+<tr>
+<td>All staff signed in & trained</td>
+<td><input type="radio" name="q1"></td>
+<td><input type="radio" name="q1"></td>
+<td><input></td>
+</tr>
 
-<label>Workers Ready:</label>
-<input type="checkbox" id="workers"><br>
+<tr>
+<td>PPE available & worn</td>
+<td><input type="radio" name="q2"></td>
+<td><input type="radio" name="q2"></td>
+<td><input></td>
+</tr>
 
-<label>Site Condition OK:</label>
-<input type="checkbox" id="site"><br>
+<tr>
+<td>No damaged solar panels</td>
+<td><input type="radio" name="q3"></td>
+<td><input type="radio" name="q3"></td>
+<td><input></td>
+</tr>
+</table>
 
-<textarea id="remarks" placeholder="Remarks"></textarea><br>
-
-<button onclick="submitPrecheck()">Submit</button>
+<button class="primary" onclick="submitPrecheck()">Submit Pre-Check</button>
+</div>
+</div>
 
 <script src="app.js"></script>
+</body>
+</html>

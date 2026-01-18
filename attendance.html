@@ -1,29 +1,23 @@
-<h3>Attendance</h3>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attendance</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<label>Employee Name</label>
-<input id="name"><br>
+<h2>Attendance</h2>
 
-<label>Present</label>
-<input type="checkbox" id="present"><br>
+<div class="card">
+  <input type="text" id="employeeName" placeholder="Employee Name">
+  <input type="number" id="hours" placeholder="Hours Worked">
+  <button onclick="submitAttendance()">Add Attendance</button>
+</div>
 
-<button onclick="submitAttendance()">Submit</button>
-<script>async function submitAttendance() {
-        const data = {
-            employee_name: document.getElementById("name").value,
-            present: document.getElementById("present").checked,
-            work_order_id: 1
-        };
+<div class="card">
+  <ul id="attendanceList"></ul>
+</div>
 
-        await fetch(`${API_URL}/attendance/`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
-
-        alert("Attendance saved");
-    }
-</script>
 <script src="app.js"></script>
+</body>
+</html>

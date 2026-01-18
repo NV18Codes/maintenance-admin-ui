@@ -1,26 +1,47 @@
-<h3>Post-Check</h3>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Post-Cleaning Check</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<h2>Post-Cleaning Inspection</h2>
 
-<textarea id="remarks"></textarea><br>
-<input type="file" id="images" multiple><br>
+<div class="card">
+<table>
+<tr>
+  <th>Check</th>
+  <th>Zone 1</th>
+  <th>Zone 2</th>
+  <th>Zone 3</th>
+  <th>Zone 4</th>
+  <th>Comments</th>
+</tr>
 
-<button onclick="submitPostCheck()">Submit</button>
-<script>async function submitPostCheck() {
-        const form = new FormData();
-        form.append("remarks", document.getElementById("remarks").value);
-        form.append("work_order_id", 1);
+<tr>
+<td>Panels clean</td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input></td>
+</tr>
 
-        const files = document.getElementById("images").files;
-        for (let f of files) form.append("images", f);
+<tr>
+<td>No damage detected</td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input type="checkbox"></td>
+<td><input></td>
+</tr>
+</table>
 
-        await fetch(`${API_URL}/post-check/`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-            body: form
-        });
+<button class="primary" onclick="submitPostcheck()">Submit Post-Check</button>
+</div>
+</div>
 
-        alert("Post-check completed");
-    }
-</script>
 <script src="app.js"></script>
+</body>
+</html>

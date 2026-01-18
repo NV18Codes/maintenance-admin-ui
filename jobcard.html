@@ -1,26 +1,161 @@
-<h3>Job Card</h3>
+<!DOCTYPE html>
+<html lang="en">
 
-<input placeholder="Date" id="date"><br>
-<textarea placeholder="Work Done" id="work"></textarea><br>
+<head>
+    <title>Job Card</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-<button onclick="submitJob()">Save</button>
-<script>async function submitJob() {
-        const data = {
-            date: document.getElementById("date").value,
-            description: document.getElementById("work").value,
-            work_order_id: 1
-        };
+<body>
 
-        await fetch(`${API_URL}/job-cards/`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+    <div class="container">
 
-        alert("Job card saved");
-    }
-</script>
-<script src="app.js"></script>
+        <h2 class="page-title">Job Card</h2>
+
+        <!-- BASIC DETAILS -->
+        <section class="card">
+            <h3>Job Details</h3>
+
+            <div class="grid-2">
+                <input placeholder="Job Number" id="job_no">
+                <input type="date" id="job_date">
+                <input placeholder="Client Name" id="client">
+                <input placeholder="Site Location" id="site">
+                <input placeholder="Supervisor / EP Rep" id="rep">
+                <input placeholder="Duration (Hours)" id="duration">
+            </div>
+        </section>
+
+        <!-- PLANT INFO -->
+        <section class="card">
+            <h3>Plant Information</h3>
+
+            <div class="grid-2">
+                <input placeholder="Plant Size (kWp)" id="plant_size">
+                <input placeholder="Broken Panels Count" id="broken_panels">
+            </div>
+
+            <textarea placeholder="Site Address" id="address"></textarea>
+        </section>
+
+        <!-- JOB DESCRIPTION -->
+        <section class="card">
+            <h3>Work Description</h3>
+            <textarea id="job_desc"
+                placeholder="Describe work performed (e.g. Solar panel cleaning, inspection, repairs)"></textarea>
+        </section>
+
+        <!-- OBSERVATIONS -->
+        <section class="card">
+            <h3>Observations & Notes</h3>
+            <textarea id="comments"
+                placeholder="Observations, anomalies, water pressure, dirt levels, damages, etc."></textarea>
+        </section>
+
+        <!-- EQUIPMENT -->
+        <section class="card">
+            <h3>Equipment Used</h3>
+
+            <div class="check-grid">
+                <label><input type="checkbox"> Robot</label>
+                <label><input type="checkbox"> Bowzer</label>
+                <label><input type="checkbox"> Flat Mops</label>
+                <label><input type="checkbox"> Hose Pipes</label>
+            </div>
+        </section>
+
+        <!-- SIGN OFF -->
+        <section class="card">
+            <h3>Sign Off</h3>
+
+            <div class="grid-2">
+                <input placeholder="Technician Name">
+                <input placeholder="Customer Name">
+            </div>
+        </section>
+
+        <button class="primary" onclick="submitJobCard()">Save Job Card</button>
+
+    </div>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 16px;
+            margin-bottom: 18px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        h3 {
+            margin-top: 0;
+            color: #0a5aa5;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .check-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+        }
+
+        textarea {
+            min-height: 80px;
+        }
+
+        .primary {
+            background: #0a5aa5;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .primary:hover {
+            background: #084a8c;
+        }
+
+        /* MOBILE */
+        @media (max-width: 600px) {
+
+            .grid-2,
+            .check-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="app.js"></script>
+</body>
+
+</html>

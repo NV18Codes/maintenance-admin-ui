@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Work Orders</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <h2>Create Work Order</h2>
+
+  <div class="card">
+    <input id="siteName" placeholder="Site Name">
+    <input id="clientName" placeholder="Client Name">
+    <button class="primary" onclick="createWorkOrder()">Create</button>
+  </div>
+
+  <div class="card">
+    <h3>Existing Work Orders</h3>
+    <ul id="workOrderList"></ul>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

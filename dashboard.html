@@ -1,34 +1,26 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Maintenance Dashboard</title>
+  <title>Maintenance Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+<div class="container">
+  <h1>Maintenance Dashboard</h1>
 
-    <h2>Maintenance Dashboard</h2>
+  <div class="nav">
+    <button onclick="go('workorder.html')">Work Orders</button>
+    <button onclick="go('workers.html')">Workers</button>
+    <button onclick="go('precheck.html')">Pre-Check</button>
+    <button onclick="go('attendance.html')">Attendance</button>
+    <button onclick="go('jobcard.html')">Job Card</button>
+    <button onclick="go('postcheck.html')">Post-Check</button>
+    <button onclick="go('documents.html')">Documents</button>
+  </div>
+</div>
 
-    <div id="adminSection" style="display:none;">
-        <button onclick="location.href='workorder.html'">Create Work Order</button>
-    </div>
-
-    <div id="workerSection" style="display:none;">
-        <button onclick="location.href='precheck.html'">Pre-Check</button>
-        <button onclick="location.href='attendance.html'">Attendance</button>
-        <button onclick="location.href='jobcard.html'">Job Card</button>
-        <button onclick="location.href='postcheck.html'">Post-Check</button>
-        <button onclick="location.href='documents.html'">Documents</button>
-    </div>
-
-
-    <script>
-        function go(page) {
-            window.location.href = page;
-        }
-    </script>
-    <script src="app.js"></script>
-
+<script>
+function go(page){ window.location.href = page; }
+</script>
 </body>
-
 </html>
